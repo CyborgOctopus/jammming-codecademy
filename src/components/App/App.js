@@ -35,11 +35,7 @@ const App = () => {
     };
 
     const search = searchTerm => {
-        console.log('Running search function');
         Spotify.search(searchTerm).then(results => {
-            console.log('Logging results after Spotify.search');
-            console.log(results);
-            console.log('Results logged.');
             setSearchResults(results);
         });
     };

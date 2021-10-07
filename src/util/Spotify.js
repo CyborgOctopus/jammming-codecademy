@@ -7,11 +7,7 @@ let accessToken;
 
 const Spotify = {
     getAccessToken: () => {
-        console.log('Getting access token...');
-        console.log('Access Token: ' + accessToken);
-        console.log('Window location: ' + window.location.href);
         if (accessToken) {
-            console.log('Access token returned!');
             return accessToken;
         }
 
@@ -24,25 +20,15 @@ const Spotify = {
             const expiresIn = parseInt(expiresInMatch[1]);
             window.setTimeout(() => accessToken = '', expiresIn * 1000);
             window.history.pushState('Access Token', null, '/');
-            console.log('Access token set');
             return accessToken;
         } else {
             window.location = `https://accounts.spotify.com/authorize?client_id=${clientId}&response_type=token`
             + `&redirect_uri=${redirectURI}&state=${state}&scope=playlist-modify-public`;
-            console.log('Getting window location after set with auth');
-            console.log(window.location.href);
-            console.log('Window location logged.');
-            //console.log('Calling again...');
-            //return Spotify.getAccessToken();
         }
     },
 
     search: searchTerm => {
-        console.log('Searching...');
         const accessToken = Spotify.getAccessToken();
-        console.log('Access token inside Spotify.search');
-        console.log(accessToken);
-        console.log('Token logged');
 
         return fetch(`https://api.spotify.com/v1/search?q=${searchTerm}&type=track`, {
             headers: {
@@ -50,13 +36,8 @@ const Spotify = {
             }
         }).then(response => response.json()).then(jsonResponse => {
             if (!jsonResponse.tracks) {
-                console.log('no tracks');
                 return [];
             }
-
-            console.log('JSON response');
-            console.log(jsonResponse);
-            console.log('response logged');
 
             const responseTracks = jsonResponse.tracks.items.map(track => ({
                 id: track.id,
@@ -65,10 +46,6 @@ const Spotify = {
                 album: track.album.name,
                 uri: track.uri
             }))
-
-            console.log('Responses');
-            console.log(responseTracks);
-            console.log('Responses logged');
 
             return responseTracks;
         });
